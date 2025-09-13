@@ -15,3 +15,9 @@ jinja2>=3.1.0
 
 # Additional markdown extensions (optional)
 pymdown-extensions>=10.0.0
+
+# Chart extension dependencies
+pyyaml>=6.0
+
+# PDF chart capture dependencies
+playwright>=1.40.0

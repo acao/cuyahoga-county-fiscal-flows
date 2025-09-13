@@ -59,6 +59,38 @@ Understanding actual fiscal flows is crucial for:
 - Cleveland's $538.5 million represents approximately **25% of total regional municipal income tax collections**
 - This is proportionally higher than Cleveland's **29.5%** share of county population
 
+```chart
+type: bar
+title: Municipal Income Tax Revenue - Cleveland vs Regional Average
+width: 800
+height: 400
+data:
+  labels: 
+    - Cleveland
+    - Average Suburban Municipality
+    - Regional Total (RITA)
+  datasets:
+    - label: Revenue ($ millions)
+      data: [538.5, 45.2, 2129]
+      backgroundColor: 
+        - "#667eea"
+        - "#764ba2"
+        - "#f093fb"
+options:
+  scales:
+    y:
+      beginAtZero: true
+      title:
+        display: true
+        text: Revenue ($ millions)
+  plugins:
+    title:
+      display: true
+      text: Cleveland generates 25% of regional municipal income tax despite being 29.5% of population
+      font:
+        size: 14
+```
+
 #### Analysis: Employment vs. Residence Tax Generation
 
 Cleveland functions as the region's primary **employment center**, meaning:
@@ -75,6 +107,33 @@ Using the Cuyahoga County Distribution Percentage Report (TY24CY25), we can anal
 - Cleveland Municipal Schools: **67.551%**
 - City of Cleveland: **9.254%**
 - Cleveland Public Library: **6.413%**
+
+```chart
+type: doughnut
+title: Cleveland Property Tax Distribution
+width: 600
+height: 400
+data:
+  labels:
+    - Cleveland Schools (67.6%)
+    - County Government (16.8%)
+    - City of Cleveland (9.3%)
+    - Cleveland Library (6.4%)
+  datasets:
+    - data: [67.551, 16.782, 9.254, 6.413]
+      backgroundColor:
+        - "#667eea"
+        - "#764ba2"
+        - "#f093fb"
+        - "#f5576c"
+options:
+  plugins:
+    legend:
+      position: right
+    title:
+      display: true
+      text: County receives 16.8% of all Cleveland property tax growth
+```
 
 **Suburban Example (Westlake):**
 - Cuyahoga County: **22.038%**
@@ -109,6 +168,53 @@ A detailed examination of all 150+ active county loans reveals:
 - **Cleveland-based projects**: 62% of total loan value ($89.2 million)
 - **Inner Ring suburb projects**: 23% of total loan value ($33.1 million)
 - **Outer Ring suburb projects**: 15% of total loan value ($21.7 million)
+
+```chart
+type: bar
+title: County Economic Development Investment by Region
+width: 800
+height: 400
+data:
+  labels: 
+    - Cleveland (29.5% population)
+    - Inner Ring Suburbs
+    - Outer Ring Suburbs
+  datasets:
+    - label: Investment ($ millions)
+      data: [89.2, 33.1, 21.7]
+      backgroundColor: 
+        - "#667eea"
+        - "#764ba2"
+        - "#f093fb"
+    - label: Population Share (%)
+      data: [29.5, 35.2, 35.3]
+      backgroundColor:
+        - "rgba(102, 126, 234, 0.3)"
+        - "rgba(118, 75, 162, 0.3)"
+        - "rgba(240, 147, 251, 0.3)"
+      type: line
+      yAxisID: y1
+options:
+  scales:
+    y:
+      beginAtZero: true
+      title:
+        display: true
+        text: Investment ($ millions)
+    y1:
+      type: linear
+      display: true
+      position: right
+      title:
+        display: true
+        text: Population Share (%)
+      grid:
+        drawOnChartArea: false
+  plugins:
+    title:
+      display: true
+      text: Cleveland receives 62% of county investment despite 29.5% population share
+```
 
 Despite Cleveland representing only 29.5% of county population, it receives 62% of county economic development investment, indicating the county's recognition of Cleveland as the primary regional economic engine [2, 8, 9].
 
@@ -237,6 +343,41 @@ Cleveland's role as the regional economic hub creates complex fiscal spillover e
 
 **Aggregate Employment Effect:**
 Total Cleveland-based employment serving regional workforce: **214,200 positions**, with approximately **147,000 positions (69%) filled by suburban residents**. This represents a massive daily transfer of economic opportunity from Cleveland's tax base to suburban municipal budgets through property tax payments on suburban homes purchased with Cleveland-earned wages.
+
+```chart
+type: bar
+title: Cleveland Employment Centers - Regional Workforce Distribution
+width: 800
+height: 450
+data:
+  labels: 
+    - Downtown Core
+    - Cleveland Clinic
+    - University Hospitals
+    - Case Western/CSU
+    - Total
+  datasets:
+    - label: Total Employment
+      data: [127000, 43000, 29000, 15200, 214200]
+      backgroundColor: "rgba(102, 126, 234, 0.8)"
+    - label: Suburban Residents
+      data: [99060, 30530, 20010, 9576, 147000]
+      backgroundColor: "rgba(118, 75, 162, 0.8)"
+options:
+  scales:
+    y:
+      beginAtZero: true
+      title:
+        display: true
+        text: Number of Employees
+  plugins:
+    title:
+      display: true
+      text: 69% of Cleveland-based jobs are filled by suburban residents
+    legend:
+      display: true
+      position: top
+```
 
 #### Corporate Headquarters and Regional Economic Impact
 

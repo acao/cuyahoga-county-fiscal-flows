@@ -8,6 +8,7 @@ import re
 import markdown
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
+from chart_extension import ChartExtension
 
 def load_base_styles():
     """Load the base CSS styles."""
@@ -74,7 +75,8 @@ def convert_markdown_to_html():
             'attr_list',
             'def_list',
             'abbr',
-            'nl2br'  # Convert single newlines to <br> tags (GFM-style)
+            'nl2br',  # Convert single newlines to <br> tags (GFM-style)
+            ChartExtension()  # Custom Chart.js extension
         ],
         extension_configs={
             'toc': {

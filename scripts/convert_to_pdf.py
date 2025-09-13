@@ -7,6 +7,13 @@ import markdown
 from pathlib import Path
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
+import asyncio
+from playwright.async_api import async_playwright
+import tempfile
+import os
+import re
+import base64
+from chart_extension import ChartExtension
 
 def create_pdf_css():
     """Create CSS specifically for PDF output."""
@@ -254,6 +261,29 @@ def create_pdf_css():
             color: #666;
             margin: 5px 0;
         }
+        
+        /* Chart styling for PDF */
+        .chart-container {
+            page-break-inside: avoid;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            background: #f8f9fa;
+        }
+        
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+        
+        .chart-title {
+            font-size: 12pt;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
     """
 
 def create_title_page():
@@ -296,8 +326,67 @@ def process_markdown_for_pdf(content):
     
     return content
 
-def convert_markdown_to_pdf():
-    """Convert the markdown report to PDF."""
+async def capture_charts_from_html():
+    """Capture Chart.js charts as static images from the HTML report."""
+    
+    html_file = Path('dist/report.html').resolve()
+    if not html_file.exists():
+        print("⚠️  HTML report not found. Charts will not be included in PDF.")
+        return {}
+    
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        
+        # Navigate to the HTML file
+        await page.goto(f"file://{html_file}")
+        
+        # Wait for Chart.js to load and render all charts
+        await page.wait_for_load_state('networkidle')
+        await page.wait_for_timeout(3000)  # Extra time for charts to render
+        
+        # Find all chart canvases
+        chart_elements = await page.query_selector_all('canvas')
+        
+        chart_images = {}
+        for canvas in chart_elements:
+            # Get the chart ID
+            chart_id = await canvas.get_attribute('id')
+            if chart_id:
+                # Take screenshot of the chart
+                screenshot = await canvas.screenshot()
+                chart_images[chart_id] = screenshot
+        
+        await browser.close()
+        return chart_images
+
+def replace_charts_with_static_images(html_content, chart_images):
+    """Replace Chart.js chart blocks with static images for PDF."""
+    
+    # For each chart image, create a static img tag
+    for chart_id, image_data in chart_images.items():
+        # Convert to base64 for embedding
+        image_b64 = base64.b64encode(image_data).decode('utf-8')
+        
+        # Create static image HTML
+        img_html = f'''
+        <div class="chart-container">
+            <img src="data:image/png;base64,{image_b64}" alt="Chart: {chart_id}" />
+        </div>
+        '''
+        
+        # Replace chart placeholder or canvas with static image
+        canvas_pattern = f'<canvas id="{chart_id}"[^>]*></canvas>'
+        html_content = re.sub(canvas_pattern, img_html, html_content)
+    
+    # Remove Chart.js scripts and related content
+    html_content = re.sub(r'<script[^>]*chart\.js[^>]*></script>', '', html_content)
+    html_content = re.sub(r'<script>.*?new Chart.*?</script>', '', html_content, flags=re.DOTALL)
+    
+    return html_content
+
+async def convert_markdown_to_pdf():
+    """Convert the markdown report to PDF with chart support."""
     
     # Ensure output directory exists
     dist_dir = Path('dist')
@@ -313,7 +402,7 @@ def convert_markdown_to_pdf():
     # Process content for better PDF formatting
     content = process_markdown_for_pdf(content)
     
-    # Configure markdown with extensions
+    # Configure markdown with extensions (including chart extension)
     md = markdown.Markdown(
         extensions=[
             'toc',
@@ -322,7 +411,8 @@ def convert_markdown_to_pdf():
             'footnotes',
             'attr_list',
             'def_list',
-            'abbr'
+            'abbr',
+            ChartExtension()  # Include chart support
         ],
         extension_configs={
             'toc': {
@@ -336,6 +426,19 @@ def convert_markdown_to_pdf():
     
     # Convert markdown to HTML
     html_content = md.convert(content)
+    
+    print("📊 Capturing charts for PDF...")
+    
+    # Capture charts as static images
+    try:
+        chart_images = await capture_charts_from_html()
+        if chart_images:
+            print(f"✅ Captured {len(chart_images)} charts for PDF")
+            html_content = replace_charts_with_static_images(html_content, chart_images)
+        else:
+            print("⚠️  No charts found or captured")
+    except Exception as e:
+        print(f"⚠️  Could not capture charts: {e}")
     
     # Create the complete HTML document for PDF
     title_page = create_title_page()
@@ -376,7 +479,7 @@ def convert_markdown_to_pdf():
 
 if __name__ == '__main__':
     try:
-        pdf_file = convert_markdown_to_pdf()
+        pdf_file = asyncio.run(convert_markdown_to_pdf())
         print(f"PDF conversion completed successfully: {pdf_file}")
     except Exception as e:
         print(f"❌ Error converting markdown to PDF: {e}")
