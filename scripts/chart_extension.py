@@ -110,7 +110,7 @@ class ChartPostprocessor(Postprocessor):
                 'y': {
                     'beginAtZero': True,
                     'ticks': {
-                        'callback': 'function(value) { return typeof value === \"number\" ? value.toLocaleString() : value; }'
+                        'callback': "function(value) { return typeof value === 'number' ? value.toLocaleString() : value; }"
                     }
                 }
             }
