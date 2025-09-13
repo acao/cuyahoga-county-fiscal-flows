@@ -50,7 +50,6 @@ Thumbs.db
 # Build output (generated files)
 dist/
 *.pdf
-*.html
 
 # Logs
 *.log

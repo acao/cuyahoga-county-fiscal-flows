@@ -1,0 +1,305 @@
+/* Shared CSS extracted from index.html webapp */
+/* Base styles for both webapp and report */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    /* Color palette */
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --header-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    
+    /* Colors */
+    --primary-blue: #667eea;
+    --primary-purple: #764ba2;
+    --dark-blue: #2c3e50;
+    --dark-purple: #34495e;
+    --text-primary: #2c3e50;
+    --text-secondary: #495057;
+    --text-muted: #6c757d;
+    --bg-light: #f8f9fa;
+    --bg-section: #f1f3f5;
+    --border-light: #e9ecef;
+    --border-color: #dee2e6;
+    --warning-bg: #fff3cd;
+    --warning-border: #ffc107;
+    
+    /* Spacing */
+    --border-radius: 15px;
+    --border-radius-sm: 8px;
+    --border-radius-lg: 20px;
+    
+    /* Shadows */
+    --shadow-sm: 0 5px 15px rgba(0,0,0,0.1);
+    --shadow-md: 0 10px 30px rgba(0,0,0,0.2);
+    --shadow-lg: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-primary);
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+/* Header styles */
+header, .header {
+    background: var(--header-gradient);
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.subtitle {
+    font-size: 1.2em;
+    opacity: 0.9;
+}
+
+/* Typography */
+h2 {
+    color: var(--text-primary);
+    margin: 30px 0 20px;
+    font-size: 1.8em;
+}
+
+h3 {
+    color: var(--dark-purple);
+    margin: 20px 0 15px;
+    font-size: 1.3em;
+}
+
+/* Key finding/highlight box */
+.key-finding {
+    background: var(--accent-gradient);
+    color: white;
+    padding: 25px;
+    margin: 20px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    font-size: 1.1em;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+
+/* Stats and cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+
+.stat-card {
+    background: var(--primary-gradient);
+    color: white;
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-number {
+    font-size: 2.5em;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Content boxes */
+.finding-box {
+    background: var(--bg-light);
+    border-left: 5px solid var(--primary-blue);
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.finding-box ul {
+    list-style-type: disc;
+    margin-top: 10px;
+}
+
+.finding-box li {
+    margin-bottom: 8px;
+    line-height: 1.6;
+}
+
+.interactive-section {
+    background: var(--bg-section);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    margin: 30px 0;
+}
+
+.methodology-note {
+    background: var(--warning-bg);
+    border: 1px solid var(--warning-border);
+    padding: 15px;
+    border-radius: var(--border-radius-sm);
+    margin: 20px 0;
+}
+
+/* Chart containers */
+.chart-container {
+    position: relative;
+    height: 400px;
+    margin: 30px 0;
+    padding: 20px;
+    background: var(--bg-light);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Navigation */
+.navigation {
+    background: var(--primary-blue);
+    padding: 20px 40px;
+    text-align: center;
+}
+
+.navigation a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navigation a:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+
+.navigation a.active {
+    background-color: rgba(255,255,255,0.3);
+}
+
+/* Sliders */
+.slider-container {
+    margin: 20px 0;
+}
+
+.slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: var(--border-color);
+    outline: none;
+    -webkit-appearance: none;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    cursor: pointer;
+    border: none;
+}
+
+/* Footer */
+footer, .footer {
+    background: var(--dark-blue);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.footer-links {
+    margin-top: 15px;
+}
+
+.footer-links a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    margin: 0 15px;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: var(--primary-purple);
+}
+
+/* Source attribution */
+.source {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    margin-top: 10px;
+    font-style: italic;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        border-radius: var(--border-radius);
+    }
+    
+    h1 {
+        font-size: 1.8em;
+    }
+    
+    .navigation {
+        padding: 15px 20px;
+    }
+    
+    .navigation a {
+        display: block;
+        margin: 5px 0;
+    }
+    
+    .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}

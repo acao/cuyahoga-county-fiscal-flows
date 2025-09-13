@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Full Report</title>
+    <style>
+        /* Base styles imported */
+        {{ base_styles }}
+        
+        /* Report-specific styles */
+        body {
+            background: var(--primary-gradient);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .content {
+            display: flex;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .sidebar {
+            width: 340px;
+            background: white;
+            padding: 0;
+            border-right: none;
+            position: sticky;
+            top: 20px;
+            overflow-y: auto;
+            box-shadow: none;
+            border-radius: 0;
+            display: block;
+        }
+        
+        .sidebar h3 {
+            background: var(--header-gradient);
+            color: white;
+            margin: 0;
+            padding: 20px 25px;
+            font-size: 1.2em;
+            font-weight: 600;
+            border-radius: 0;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        
+        .toc {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .toc * {
+            list-style: none !important;
+        }
+        
+        .toc-wrapper {
+            padding: 0;
+            margin: 0;
+        }
+        
+        /* Hide the duplicate TOC title from markdown */
+        .toc .toctitle {
+            display: none;
+        }
+        
+        /* Clean up the TOC div margins */
+        .toc {
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Remove any extra spacing around the TOC div */
+        .toc-wrapper > .toc {
+            border-radius: 0;
+            box-shadow: none;
+            background: none;
+        }
+        
+        /* Add proper padding to the TOC content */
+        .toc-wrapper {
+            padding: 20px 0;
+            background: white; /* Ensure white background */
+        }
+        
+        .toc li {
+            margin: 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .toc li:last-child {
+            border-bottom: none;
+        }
+        
+        .toc a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            line-height: 1.4;
+            display: block;
+            padding: 12px 25px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .toc a:hover {
+            color: var(--primary-blue);
+            border-left-color: var(--primary-blue);
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, rgba(102, 126, 234, 0.05) 50%, transparent 100%);
+            transform: translateX(3px);
+        }
+        
+        .toc a:active {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.2) 0%, rgba(102, 126, 234, 0.1) 50%, transparent 100%);
+        }
+        
+        /* TOC depth styling with clear hierarchy */
+        .toc .toc-h1 {
+            border-left: 3px solid var(--primary-blue);
+            background: rgba(102, 126, 234, 0.03);
+        }
+        
+        .toc .toc-h1:first-child {
+            margin-top: 0;
+        }
+        
+        .toc .toc-h1 a {
+            font-weight: 700;
+            font-size: 0.95em;
+            color: var(--text-primary);
+            padding: 15px 25px;
+            border-left: 4px solid var(--primary-blue);
+        }
+        
+        .toc .toc-h1 a:hover {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.15) 0%, rgba(102, 126, 234, 0.08) 50%, transparent 100%);
+        }
+        
+        .toc .toc-h2 a {
+            font-weight: 600;
+            padding-left: 35px;
+            font-size: 0.9em;
+            color: var(--dark-purple);
+        }
+        
+        .toc .toc-h2 a::before {
+            content: "▸";
+            position: absolute;
+            left: 25px;
+            color: var(--primary-blue);
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+        
+        .toc .toc-h3 a {
+            padding-left: 45px;
+            font-size: 0.85em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .toc .toc-h3 a::before {
+            content: "◦";
+            position: absolute;
+            left: 35px;
+            color: var(--text-muted);
+            font-size: 0.8em;
+            opacity: 0.6;
+        }
+        
+        .toc .toc-h4 a {
+            padding-left: 55px;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .toc .toc-h4 a::before {
+            content: "·";
+            position: absolute;
+            left: 45px;
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+        
+        /* Add visual separators for main sections */
+        .toc .toc-h1:not(:first-child) {
+            margin-top: 8px;
+            border-top: 1px solid var(--border-light);
+            padding-top: 8px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 0;
+            max-width: calc(100% - 340px);
+            background: white;
+            margin: 0 0 0 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        
+        .main-content-inner {
+            padding: 40px;
+        }
+        
+        .main-content h1 {
+            color: var(--text-primary);
+            font-size: 2.2em;
+            margin: 40px 0 20px;
+            border-bottom: 3px solid var(--primary-blue);
+            padding-bottom: 10px;
+        }
+        
+        .main-content h2 {
+            color: var(--text-primary);
+            font-size: 1.8em;
+            margin: 35px 0 15px;
+            border-left: 5px solid var(--primary-blue);
+            padding-left: 15px;
+        }
+        
+        .main-content h3 {
+            color: var(--dark-purple);
+            font-size: 1.4em;
+            margin: 25px 0 10px;
+        }
+        
+        .main-content h4 {
+            color: var(--text-secondary);
+            font-size: 1.2em;
+            margin: 20px 0 10px;
+        }
+        
+        .main-content p {
+            margin: 15px 0;
+            text-align: justify;
+            line-height: 1.7;
+        }
+        
+        .main-content ul, .main-content ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        .main-content li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        
+        .main-content blockquote {
+            background: var(--bg-light);
+            border-left: 5px solid var(--primary-blue);
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            border-radius: 5px;
+        }
+        
+        .main-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: var(--shadow-sm);
+            border-radius: var(--border-radius-sm);
+            overflow: hidden;
+        }
+        
+        .main-content table th,
+        .main-content table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .main-content table th {
+            background: var(--primary-blue);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .main-content table tr:hover {
+            background: var(--bg-light);
+        }
+        
+        .main-content code {
+            background: var(--bg-light);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--text-primary);
+        }
+        
+        .main-content pre {
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: var(--border-radius-sm);
+            margin: 20px 0;
+            border: 1px solid var(--border-light);
+        }
+        
+        .main-content pre code {
+            background: none;
+            padding: 0;
+        }
+        
+        .main-content strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .main-content a {
+            color: var(--primary-blue);
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        
+        .main-content a:hover {
+            color: var(--primary-purple);
+        }
+        
+        /* Anchor links */
+        .main-content .toclink {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .main-content .headerlink {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .main-content h1:hover .headerlink,
+        .main-content h2:hover .headerlink,
+        .main-content h3:hover .headerlink,
+        .main-content h4:hover .headerlink {
+            opacity: 1;
+        }
+        
+        /* Print styles */
+        @media print {
+            .sidebar, .navigation {
+                display: none;
+            }
+            
+            .main-content {
+                max-width: 100%;
+                padding: 20px;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 1024px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: relative;
+                max-height: 300px;
+                order: 2;
+            }
+            
+            .main-content {
+                max-width: 100%;
+                padding: 20px;
+                order: 1;
+            }
+            
+            .navigation a {
+                display: block;
+                margin: 5px 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                padding: 20px 15px;
+            }
+            
+            .main-content {
+                padding: 15px;
+            }
+            
+            .main-content h1 {
+                font-size: 1.8em;
+            }
+            
+            .main-content h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>{{ title }}</h1>
+            <div class="subtitle">{{ subtitle }}</div>
+        </div>
+        
+        <div class="navigation">
+            <a href="index.html">Interactive Dashboard</a>
+            <a href="report.pdf">Download PDF</a>
+            <a href="#{{ methodology_anchor }}">Methodology</a>
+            <a href="#{{ conclusion_anchor }}">Conclusion</a>
+        </div>
+        
+        <div class="content">
+            <div class="sidebar">
+                <h3>Table of Contents</h3>
+                <div class="toc-wrapper">
+                    {{ toc|safe }}
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="main-content-inner">
+                    {{ content|safe }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2024 Cuyahoga County Fiscal Flows Research</p>
+            <div class="footer-links">
+                <a href="index.html">Interactive Dashboard</a>
+                <a href="report.pdf">Download PDF</a>
+                <a href="#{{ methodology_anchor }}">Methodology</a>
+                <a href="mailto:contact@research.example.com">Contact Researchers</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
