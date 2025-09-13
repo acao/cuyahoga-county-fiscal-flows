@@ -331,8 +331,8 @@ def create_html_template():
         <div class="navigation">
             <a href="index.html">Interactive Dashboard</a>
             <a href="report.pdf">Download PDF</a>
-            <a href="#methodology">Methodology</a>
-            <a href="#conclusion">Conclusion</a>
+            <a href="#methodology-and-data-sources-comprehensive-research-framework">Methodology</a>
+            <a href="#8-conclusion">Conclusion</a>
         </div>
         
         <div class="content">
@@ -351,7 +351,7 @@ def create_html_template():
             <div class="footer-links">
                 <a href="index.html">Interactive Dashboard</a>
                 <a href="report.pdf">Download PDF</a>
-                <a href="#methodology">Methodology</a>
+                <a href="#methodology-and-data-sources-comprehensive-research-framework">Methodology</a>
                 <a href="mailto:contact@research.example.com">Contact Researchers</a>
             </div>
         </div>
