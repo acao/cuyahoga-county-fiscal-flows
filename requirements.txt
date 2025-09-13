@@ -21,3 +21,5 @@ pyyaml>=6.0
 
 # PDF chart capture dependencies
 playwright>=1.40.0
+
+chart_extension
