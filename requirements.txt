@@ -1,0 +1,14 @@
+# Python dependencies for markdown to HTML and PDF conversion
+# Required for GitHub Actions publishing workflow
+
+# Core markdown processing
+markdown>=3.5.0
+
+# PDF generation
+weasyprint>=60.0
+
+# HTML processing and parsing
+beautifulsoup4>=4.12.0
+
+# Additional markdown extensions (optional)
+pymdown-extensions>=10.0.0
