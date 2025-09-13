@@ -13,7 +13,7 @@ import tempfile
 import os
 import re
 import base64
-from .chart_extension import ChartExtension
+from chart_extension import ChartExtension
 
 def create_pdf_css():
     """Create CSS specifically for PDF output."""

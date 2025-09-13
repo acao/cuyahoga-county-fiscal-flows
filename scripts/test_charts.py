@@ -5,7 +5,7 @@ Test script for the Chart.js markdown extension.
 
 import markdown
 from pathlib import Path
-from .chart_extension import ChartExtension
+from chart_extension import ChartExtension
 
 def test_chart_extension():
     """Test the chart extension with a simple markdown file."""

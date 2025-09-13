@@ -8,7 +8,7 @@ import re
 import markdown
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
-from .chart_extension import ChartExtension
+from chart_extension import ChartExtension
 
 def load_base_styles():
     """Load the base CSS styles."""
