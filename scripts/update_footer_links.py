@@ -38,7 +38,7 @@ def update_webapp_footer():
     footer_links_html = f'''
             <div class="footer-links">
                 <a href="report.html">Download Full Report</a>
-                <a href="report.html#{anchors.get('methodology', 'methodology-and-data-sources-comprehensive-research-framework')}">View Methodology</a>
+                <a href="report.html#{anchors.get('methodology', '7-methodology-and-data-sources-comprehensive-research-framework')}">View Methodology</a>
                 <a href="report.html#{anchors.get('appendix-b', 'appendix-b-works-cited')}">Data Sources</a>
                 <a href="mailto:contact@research.example.com">Contact Researchers</a>
             </div>'''
